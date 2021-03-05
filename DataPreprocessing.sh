@@ -27,7 +27,14 @@ cat Scripture_TextAndStrongs.csv |\
 
 # Concat scripture refs into strongs numbers
 cut -d "," -f 1-3 Scripture_TextAndStrongs.csv > Scripture_Refs.csv
-paste -d "," Scripture_Refs.csv Scripture_Strongs.csv |\
+paste -d "," Scripture_Refs.csv Scripture_StrongsA.csv |\
 	awk -F',' '{print $0}' \
 	> Scripture_StrongsB.csv
 
+# Construct kjv word repent paired with its strongs number
+cat Scripture_TextAndStrongs.csv |\
+	awk -F',' '{print $4}' |\
+	sed 's/.*repent\(.*\)\]/\1/' |\
+	awk -F']' '{print $1}' |\
+	sed 's/^/repent/g' \
+	> test
